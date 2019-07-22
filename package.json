@@ -1,7 +1,10 @@
 {
   "name": "oebbapp",
+  "description": "A simple React Native App to test https://github.com/timhagn/oebb-graphql.",
   "version": "0.0.1",
+  "author": "Tim Hagn <mail@timhagn.com>",
   "private": true,
+  "repository": "https://github.com/timhagn/oebbapp",
   "scripts": {
     "start": "react-native start",
     "test": "jest",
@@ -10,7 +13,10 @@
   "dependencies": {
     "react": "16.8.6",
     "react-native": "0.60.4",
-    "react-native-bcrypt": "^2.4.0"
+    "react-native-bcrypt": "^2.4.0",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.4",
+    "redux-starter-kit": "^0.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
