@@ -4,10 +4,8 @@
  * @param value *   Value to test
  * @return {boolean}
  */
-const isString = value =>
+export const isString = value =>
   Object.prototype.toString.call(value) === '[object String]'
-
-exports.isString = isString
 
 /**
  * Tests a given value on being an Object.
@@ -15,7 +13,17 @@ exports.isString = isString
  * @param value *   Value to test
  * @return {boolean}
  */
-const isObject = value =>
+export const isObject = value =>
   Object.prototype.toString.call(value) === '[object Object]'
 
-exports.isObject = isObject
+/**
+ * Compares a given value with a selected value.
+ *
+ * @param query     string
+ * @param selected  string
+ * @return {boolean}
+ */
+export const isSelected = (query, selected) =>
+  isString(query) &&
+  isString(selected) &&
+  query.toLowerCase().trim() === selected.toLowerCase().trim()

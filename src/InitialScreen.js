@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, { Fragment } from 'react'
+import React, { useState } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -26,13 +26,16 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen'
+import LocationSearchInput from './components/LocationSearchInput'
 
 
 const InitialScreen = () => {
-  const { loading, data } = getLocationsByName(`Wien`)
-  !loading && console.log(data)
+  // const { loading, data } = getLocationsByName(`Wien`)
+  const [ selectedLocation, setSelectedLocation ] = useState({})
+  // const setCurrentLocation = location => setSelectedLocation(location)
+
   return (
-    <Fragment>
+    <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
@@ -47,22 +50,27 @@ const InitialScreen = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              {loading ? (
-                <Text>Loading ...</Text>
-              ) : (
-                <FlatList
-                  data={data.locations}
-                  numColumns={1}
-                  keyExtractor={({ id }) => id.toString()}
-                  renderItem={({ item }) => {
-                    return (
-                      <Text style={styles.sectionDescription}>
-                        {item.name} Test
-                      </Text>
-                    )
-                  }}
-                />
-              )}
+              <LocationSearchInput
+                // onLocationSelected={setSelectedLocation}
+                selectedLocation={selectedLocation}
+                placeholder={`Start eingeben`}
+              />
+              {/*{loading ? (*/}
+              {/*  <Text>Loading ...</Text>*/}
+              {/*) : (*/}
+              {/*  <FlatList*/}
+              {/*    data={data.locations}*/}
+              {/*    numColumns={1}*/}
+              {/*    keyExtractor={({ id }) => id.toString()}*/}
+              {/*    renderItem={({ item }) => {*/}
+              {/*      return (*/}
+              {/*        <Text style={styles.sectionDescription}>*/}
+              {/*          {item.name} Test*/}
+              {/*        </Text>*/}
+              {/*      )*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*)}*/}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>See Your Changes</Text>
@@ -86,7 +94,7 @@ const InitialScreen = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </Fragment>
+    </>
   )
 }
 
