@@ -17,8 +17,7 @@ import {
   FlatList,
 } from 'react-native'
 
-import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import getLocationsByName from './utils/getLocationsByName'
 
 import {
   Header,
@@ -28,18 +27,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen'
 
-const LOCATION_INFO = gql`
-  query {
-    locations(name: "Wien") {
-      id
-      type
-      name
-    }
-  }
-`
 
 const InitialScreen = () => {
-  const { loading, data } = useQuery(LOCATION_INFO)
+  const { loading, data } = getLocationsByName(`Wien`)
   !loading && console.log(data)
   return (
     <Fragment>
