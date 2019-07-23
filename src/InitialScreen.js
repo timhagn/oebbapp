@@ -14,7 +14,11 @@ import {
   View,
   Text,
   StatusBar,
+  FlatList,
 } from 'react-native'
+
+import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 
 import {
   Header,
@@ -24,7 +28,19 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen'
 
+const LOCATION_INFO = gql`
+  query {
+    locations(name: "Wien") {
+      id
+      type
+      name
+    }
+  }
+`
+
 const InitialScreen = () => {
+  const { loading, data } = useQuery(LOCATION_INFO)
+  !loading && console.log(data)
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
@@ -41,11 +57,22 @@ const InitialScreen = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
+              {loading ? (
+                <Text>Loading ...</Text>
+              ) : (
+                <FlatList
+                  data={data.locations}
+                  numColumns={1}
+                  keyExtractor={({ id }) => id.toString()}
+                  renderItem={({ item }) => {
+                    return (
+                      <Text style={styles.sectionDescription}>
+                        {item.name} Test
+                      </Text>
+                    )
+                  }}
+                />
+              )}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>See Your Changes</Text>
@@ -98,6 +125,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
+  },
+  types: {
+    flexDirection: 'row',
+    marginTop: 20,
   },
   highlight: {
     fontWeight: '700',
