@@ -29,19 +29,15 @@ const LOCATION_QUERY = gql`
 const LocationSearchInput = ({
   placeholder,
   // selectedLocation,
-  // onLocationSelected,
+  onLocationSelected,
 }) => {
   const [currentLocation, setCurrentLocation] = useState({})
   const [currentData, setCurrentData] = useState({})
   const [locationSearch, setLocationSearch] = useState(``)
 
-  // const { loading, data } = getLocationsByName(locationSearch)
-
-  // TODO: Return locations but doesn't update autocomplete data...
-  // TODO: Build own autocomplete and use Context / Redux to port data ; )
+  // TODO: Use Context / Redux to port data ; )
   const client = useApolloClient()
   useEffect(() => {
-    console.log(locationSearch)
     let ignore = false
 
     async function getLocation() {
@@ -49,16 +45,24 @@ const LocationSearchInput = ({
         query: LOCATION_QUERY,
         variables: { name: locationSearch },
       })
-      console.log(data)
-      if (!ignore) setCurrentData(data)
+      // console.log(data)
+      // if (!ignore) {
+        setCurrentData(data)
+      // }
     }
 
-    getLocation()
+    if (locationSearch.length >= 3) getLocation()
 
-    return () => {
-      ignore = true
-    }
+    // return () => {
+    //   ignore = true
+    // }
   }, [locationSearch])
+
+  useEffect(() => {
+    !locationSearch.length
+      ? onLocationSelected({})
+      : onLocationSelected(currentLocation)
+  }, [currentLocation, locationSearch])
 
   return (
     <View>
@@ -67,23 +71,14 @@ const LocationSearchInput = ({
         autoCorrect={false}
         containerStyle={styles.autocompleteContainer}
         data={
-          _.has(currentData, 'locations') && !_.has(currentLocation, 'name') ? currentData.locations : []
-          // !loading &&
-          // _.has(currentLocation, 'name') &&
-          // isSelected(locationSearch, currentLocation.name)
-          //   ? []
-          //   :_.has(data, 'locations') ? data.locations : []
+          _.has(currentData, 'locations') && !_.has(currentLocation, 'name')
+            ? currentData.locations
+            : []
         }
-        defaultValue={isObject(currentLocation) ? currentLocation.name : ``}
         onChangeText={text => setLocationSearch(text)}
         placeholder={placeholder}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           return (
-            // loading ? (
-            //   <View>
-            //     <ActivityIndicator size="small" color="#00ff00" />
-            //   </View>
-            // ) :
             <TouchableOpacity onPress={() => setCurrentLocation(item)}>
               <Text style={styles.itemText}>{item.name}</Text>
             </TouchableOpacity>
@@ -106,7 +101,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     margin: 2,
-    color: 'black'
+    color: 'black',
   },
 })
 
