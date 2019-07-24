@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 
-import Autocomplete from 'react-native-autocomplete-input'
+import Autocomplete from './Autocomplete'
 import getLocationsByName from '../utils/getLocationsByName'
 import { isObject, isSelected, isString } from '../utils/helpers'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -41,6 +41,7 @@ const LocationSearchInput = ({
   // TODO: Build own autocomplete and use Context / Redux to port data ; )
   const client = useApolloClient()
   useEffect(() => {
+    console.log(locationSearch)
     let ignore = false
 
     async function getLocation() {
@@ -73,19 +74,21 @@ const LocationSearchInput = ({
           //   ? []
           //   :_.has(data, 'locations') ? data.locations : []
         }
-        // defaultValue={isObject(selectedLocation) ? selectedLocation.name : ``}
+        defaultValue={isObject(currentLocation) ? currentLocation.name : ``}
         onChangeText={text => setLocationSearch(text)}
         placeholder={placeholder}
-        renderItem={({ location }) => (
-          // loading ? (
-          //   <View>
-          //     <ActivityIndicator size="small" color="#00ff00" />
-          //   </View>
-          // ) :
-          <TouchableOpacity onPress={() => setCurrentLocation(location)}>
-            <Text style={styles.itemText}>{location}</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({item}) => {
+          return (
+            // loading ? (
+            //   <View>
+            //     <ActivityIndicator size="small" color="#00ff00" />
+            //   </View>
+            // ) :
+            <TouchableOpacity onPress={() => setCurrentLocation(item.name)}>
+              <Text style={styles.itemText}>{item.name}</Text>
+            </TouchableOpacity>
+          )
+        }}
       />
     </View>
   )
@@ -103,6 +106,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     margin: 2,
+    color: 'black'
   },
 })
 
