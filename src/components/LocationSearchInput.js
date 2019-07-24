@@ -67,7 +67,7 @@ const LocationSearchInput = ({
         autoCorrect={false}
         containerStyle={styles.autocompleteContainer}
         data={
-          _.has(currentData, 'locations') ? currentData.locations : []
+          _.has(currentData, 'locations') && !_.has(currentLocation, 'name') ? currentData.locations : []
           // !loading &&
           // _.has(currentLocation, 'name') &&
           // isSelected(locationSearch, currentLocation.name)
@@ -84,7 +84,7 @@ const LocationSearchInput = ({
             //     <ActivityIndicator size="small" color="#00ff00" />
             //   </View>
             // ) :
-            <TouchableOpacity onPress={() => setCurrentLocation(item.name)}>
+            <TouchableOpacity onPress={() => setCurrentLocation(item)}>
               <Text style={styles.itemText}>{item.name}</Text>
             </TouchableOpacity>
           )
